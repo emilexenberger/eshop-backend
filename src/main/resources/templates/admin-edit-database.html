@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layouts/main"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Admin - Edit database</title>
+  <script th:src="@{/js/remove-item.js}" defer="defer"></script>
+</head>
+
+<div layout:fragment="content">
+  <div class="d-flex flex-row">
+    <a href="/item/create" type="button" class="btn btn-primary btn-sm mb-1 mr-1">Admin - create a new item</a>
+    <a href="/" alt="Home" class="btn btn-primary btn-sm mb-1 mr-1">Home</a><br />
+    <form th:action="@{/logout}" method="post">
+      <input type="submit" value="Log Out" class="btn btn-primary btn-sm mb-1 mr-1"/>
+    </form>
+  </div>
+  <table class="table table-bordered col-12">
+    <thread>
+      <tr>
+        <th>Product code</th>
+        <th>Product name</th>
+        <th>Volume</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thread>
+
+    <tbody>
+    <tr th:each="item:${allItems}">
+      <td th:text="${item.productCode}" class="align-middle"></td>
+      <td th:text="${item.productName}" class="align-middle"></td>
+      <td th:text="${item.volume}" class="align-middle"></td>
+      <td th:text="${item.price}" class="align-middle"></td>
+      <td class="align-middle">
+        <a th:href="@{/item/edit/{idItem}(idItem=${item.id})}" class="btn btn-primary btn-sm">Edit</a>
+        <a href="#" th:attr="item-id=${item.id}" class="btn btn-primary btn-sm" onclick="removeItem(this.getAttribute('item-id'));">Remove</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</html>
