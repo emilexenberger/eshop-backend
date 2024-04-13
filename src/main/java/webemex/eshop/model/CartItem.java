@@ -16,10 +16,6 @@ public class CartItem {
     private UUID id;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="id_user")
-    private AppUser appUser;
-
-    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="id_item")
     private Item item;
 
@@ -31,14 +27,6 @@ public class CartItem {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
     }
 
     public Item getItem() {
@@ -61,7 +49,6 @@ public class CartItem {
     public String toString() {
         return "CartItem{" +
                 "id=" + id +
-                ", appUser=" + appUser +
                 ", item=" + item +
                 ", volume=" + volume +
                 '}';

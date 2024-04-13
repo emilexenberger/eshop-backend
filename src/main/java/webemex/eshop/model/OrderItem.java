@@ -18,10 +18,6 @@ public class OrderItem {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user")
-    private AppUser appUser;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_item")
     private Item item;
 
@@ -35,7 +31,6 @@ public class OrderItem {
     }
 
     public OrderItem(CartItem cartItem) {
-        this.appUser = cartItem.getAppUser();
         this.item = cartItem.getItem();
         this.volume = cartItem.getVolume();
     }
@@ -46,14 +41,6 @@ public class OrderItem {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
     }
 
     public Item getItem() {
