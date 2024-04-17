@@ -11,13 +11,11 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 public class IndexController {
-    @Autowired
-
     @GetMapping("/")
     public Map<String, Object> index() {
         Map<String, Object> response = new HashMap<>();
 
-        response.put("userLogged", false);
+        response.put("userLogged", true);
 
         return response;
     }
