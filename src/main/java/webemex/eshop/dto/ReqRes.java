@@ -19,9 +19,9 @@ public class ReqRes {
     private String refreshToken;
     private String expirationTime;
     private String name;
-    private String city;
+    private String surname;
     private String role;
-    private String email;
+    private String username;
     private String password;
     private OurUsers ourUsers;
     private List<OurUsers> ourUsersList;

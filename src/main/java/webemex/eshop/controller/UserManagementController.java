@@ -55,8 +55,8 @@ public class UserManagementController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReqRes> getMyProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        ReqRes response = usersManagementService.getMyInfo(email);
+        String username = authentication.getName();
+        ReqRes response = usersManagementService.getMyInfo(username);
         return  ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
