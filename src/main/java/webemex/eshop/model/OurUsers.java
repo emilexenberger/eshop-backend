@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "ourusers")
+@Table(name = "our_users")
 @Data
 public class OurUsers implements UserDetails {
 
