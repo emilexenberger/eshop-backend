@@ -12,15 +12,11 @@ public class OrderResponseDTO {
     private LocalDateTime dateTime;
     double totalPrice;
     private AppUserResponseDTO appUser;
-    private List<OrderItemResponseDTO> orderItems;
 
     public OrderResponseDTO(Order order) {
         this.id = order.getId().toString();
         this.dateTime = order.getDateTime();
         this.totalPrice = order.getTotalPrice();
         this.appUser = new AppUserResponseDTO(order.getAppUser());
-        this.orderItems = order.getOrderItems().stream()
-                .map(OrderItemResponseDTO::new)
-                .collect(Collectors.toList());
     }
 }
