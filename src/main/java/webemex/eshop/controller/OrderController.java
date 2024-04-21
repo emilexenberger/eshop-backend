@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import webemex.eshop.dto.request.CartItemRequestDTO;
+import webemex.eshop.dto.request.OrderItemRequestDTO;
+import webemex.eshop.dto.response.OrderItemResponseDTO;
 import webemex.eshop.dto.response.OrderResponseDTO;
 import webemex.eshop.model.AppUser;
 import webemex.eshop.model.CartItem;
@@ -83,11 +86,19 @@ public class OrderController {
         orderService.saveOrder(order);
     }
 
-    @GetMapping("/open")
+    @PostMapping("/details")
     @PreAuthorize("isAuthenticated()")
-    public String openOrder(@PathVariable UUID idUserOrder, Model model) {
-        Order order = orderService.findOrderById(idUserOrder);
-        model.addAttribute("order", order);
-        return "order";
+    public List<OrderItemResponseDTO> openOrder(@RequestBody OrderItemRequestDTO req) {
+        AppUser appUser = usersManagementService.getAuthenticatedUser();
+        UUID orderId = UUID.fromString(req.getOrderId());
+
+        List<OrderItem> userOrderItems = orderItemService.findUserOrderItemsByOrderId(appUser, orderId);
+        System.out.println(userOrderItems.size());
+
+        List<OrderItemResponseDTO> userOrderItemsDTO = userOrderItems.stream()
+                .map(OrderItemResponseDTO::new)
+                .collect(Collectors.toList());
+
+        return userOrderItemsDTO;
     }
 }

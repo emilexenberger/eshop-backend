@@ -55,4 +55,15 @@ public class OrderItemService {
 
         return userOrderItemById;
     }
+
+    public List<OrderItem> findUserOrderItemsByOrderId(AppUser appUser, UUID orderId) {
+        List<OrderItem> userOrderItems = findUserOrderItems(appUser);
+        List<OrderItem> userOrderItemsByOrderId = new ArrayList<>();
+        for (OrderItem userOrderItem : userOrderItems) {
+            if (userOrderItem.getOrder().getId().equals(orderId)) {
+                userOrderItemsByOrderId.add(userOrderItem);
+            }
+        }
+        return userOrderItemsByOrderId;
+    }
 }
