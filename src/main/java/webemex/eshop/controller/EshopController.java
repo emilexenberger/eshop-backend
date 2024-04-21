@@ -10,8 +10,6 @@ import webemex.eshop.service.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
-
 @RestController
 @CrossOrigin
 @RequestMapping("/eshop")

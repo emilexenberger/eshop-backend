@@ -21,11 +21,4 @@ public class CartItemResponseDTO {
         this.item = new ItemResponseDTO(cartItem.getItem());
         this.volume = cartItem.getVolume();
     }
-
-    public List<CartItemResponseDTO> listCartItemResponseDTO(List<CartItem> listCartItem) {
-        List<CartItemResponseDTO> listCartItemResponseDTO = listCartItem.stream()
-                .map(CartItemResponseDTO::new)
-                .collect(Collectors.toList());
-        return listCartItemResponseDTO;
-    }
 }
