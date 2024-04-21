@@ -3,7 +3,7 @@ package webemex.eshop.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import webemex.eshop.model.OurUsers;
+import webemex.eshop.model.AppUser;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class ReqRes {
     private String role;
     private String username;
     private String password;
-    private OurUsers ourUsers;
-    private List<OurUsers> ourUsersList;
+    private AppUser appUser;
+    private List<AppUser> appUserList;
 
 }

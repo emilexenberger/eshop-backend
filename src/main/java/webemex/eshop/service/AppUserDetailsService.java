@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import webemex.eshop.repository.UsersRepository;
 
 @Service
-public class OurUserDetailsService implements UserDetailsService {
+public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UsersRepository usersRepository;

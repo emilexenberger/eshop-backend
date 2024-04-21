@@ -1,6 +1,8 @@
 package webemex.eshop.model;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,16 +10,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
-@Table(name = "our_users")
 @Data
-public class OurUsers implements UserDetails {
+public class AppUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @Type(type = "uuid-char")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID id;
     private String username;
     private String name;
     private String password;

@@ -7,8 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.ReqRes;
-import webemex.eshop.model.OurUsers;
+import webemex.eshop.model.AppUser;
 import webemex.eshop.service.UsersManagementService;
+
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -40,18 +42,18 @@ public class UserManagementController {
 
     @GetMapping("/admin/get-users/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ReqRes> getUSerByID(@PathVariable Integer userId){
+    public ResponseEntity<ReqRes> getUSerByID(@PathVariable UUID userId){
         return ResponseEntity.ok(usersManagementService.getUsersById(userId));
 
     }
 
     @PutMapping("/admin/update/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ReqRes> updateUser(@PathVariable Integer userId, @RequestBody OurUsers reqres){
+    public ResponseEntity<ReqRes> updateUser(@PathVariable UUID userId, @RequestBody AppUser reqres){
         return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
     }
 
-    @GetMapping("/adminuser/get-profile")
+    @GetMapping("/user/get-profile")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ReqRes> getMyProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,7 +64,7 @@ public class UserManagementController {
 
     @DeleteMapping("/admin/delete/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<ReqRes> deleteUSer(@PathVariable Integer userId){
+    public ResponseEntity<ReqRes> deleteUSer(@PathVariable UUID userId){
         return ResponseEntity.ok(usersManagementService.deleteUser(userId));
     }
 }

@@ -12,7 +12,7 @@ public class IndexController {
     public Map<String, Object> index() {
         Map<String, Object> response = new HashMap<>();
 
-        response.put("userLogged", true);
+        response.put("userLogged", false);
 
         return response;
     }
