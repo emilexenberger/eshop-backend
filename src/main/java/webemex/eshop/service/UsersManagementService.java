@@ -3,9 +3,11 @@ package webemex.eshop.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import webemex.eshop.dto.ReqRes;
+import webemex.eshop.dto.AuthorizationDTO;
 import webemex.eshop.model.AppUser;
 import webemex.eshop.repository.UsersRepository;
 
@@ -27,8 +29,8 @@ public class UsersManagementService {
     private PasswordEncoder passwordEncoder;
 
 
-    public ReqRes register(ReqRes registrationRequest){
-        ReqRes resp = new ReqRes();
+    public AuthorizationDTO register(AuthorizationDTO registrationRequest){
+        AuthorizationDTO resp = new AuthorizationDTO();
 
         try {
             AppUser appUser = new AppUser();
@@ -52,8 +54,8 @@ public class UsersManagementService {
     }
 
 
-    public ReqRes login(ReqRes loginRequest){
-        ReqRes response = new ReqRes();
+    public AuthorizationDTO login(AuthorizationDTO loginRequest){
+        AuthorizationDTO response = new AuthorizationDTO();
         try {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
@@ -79,8 +81,8 @@ public class UsersManagementService {
 
 
 
-    public ReqRes refreshToken(ReqRes refreshTokenReqiest){
-        ReqRes response = new ReqRes();
+    public AuthorizationDTO refreshToken(AuthorizationDTO refreshTokenReqiest){
+        AuthorizationDTO response = new AuthorizationDTO();
         try{
             String ourEmail = jwtUtils.extractUsername(refreshTokenReqiest.getToken());
             AppUser users = usersRepository.findByUsername(ourEmail).orElseThrow();
@@ -103,64 +105,64 @@ public class UsersManagementService {
     }
 
 
-    public ReqRes getAllUsers() {
-        ReqRes reqRes = new ReqRes();
+    public AuthorizationDTO getAllUsers() {
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO();
 
         try {
             List<AppUser> result = usersRepository.findAll();
             if (!result.isEmpty()) {
-                reqRes.setAppUserList(result);
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("Successful");
+                authorizationDTO.setAppUserList(result);
+                authorizationDTO.setStatusCode(200);
+                authorizationDTO.setMessage("Successful");
             } else {
-                reqRes.setStatusCode(404);
-                reqRes.setMessage("No users found");
+                authorizationDTO.setStatusCode(404);
+                authorizationDTO.setMessage("No users found");
             }
-            return reqRes;
+            return authorizationDTO;
         } catch (Exception e) {
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Error occurred: " + e.getMessage());
-            return reqRes;
+            authorizationDTO.setStatusCode(500);
+            authorizationDTO.setMessage("Error occurred: " + e.getMessage());
+            return authorizationDTO;
         }
     }
 
 
-    public ReqRes getUsersById(UUID id) {
-        ReqRes reqRes = new ReqRes();
+    public AuthorizationDTO getUsersById(UUID id) {
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO();
         try {
             AppUser usersById = usersRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
-            reqRes.setAppUser(usersById);
-            reqRes.setStatusCode(200);
-            reqRes.setMessage("Users with id '" + id + "' found successfully");
+            authorizationDTO.setAppUser(usersById);
+            authorizationDTO.setStatusCode(200);
+            authorizationDTO.setMessage("Users with id '" + id + "' found successfully");
         } catch (Exception e) {
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Error occurred: " + e.getMessage());
+            authorizationDTO.setStatusCode(500);
+            authorizationDTO.setMessage("Error occurred: " + e.getMessage());
         }
-        return reqRes;
+        return authorizationDTO;
     }
 
 
-    public ReqRes deleteUser(UUID userId) {
-        ReqRes reqRes = new ReqRes();
+    public AuthorizationDTO deleteUser(UUID userId) {
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO();
         try {
             Optional<AppUser> userOptional = usersRepository.findById(userId);
             if (userOptional.isPresent()) {
                 usersRepository.deleteById(userId);
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("User deleted successfully");
+                authorizationDTO.setStatusCode(200);
+                authorizationDTO.setMessage("User deleted successfully");
             } else {
-                reqRes.setStatusCode(404);
-                reqRes.setMessage("User not found for deletion");
+                authorizationDTO.setStatusCode(404);
+                authorizationDTO.setMessage("User not found for deletion");
             }
         } catch (Exception e) {
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Error occurred while deleting user: " + e.getMessage());
+            authorizationDTO.setStatusCode(500);
+            authorizationDTO.setMessage("Error occurred while deleting user: " + e.getMessage());
         }
-        return reqRes;
+        return authorizationDTO;
     }
 
-    public ReqRes updateUser(UUID userId, AppUser updatedUser) {
-        ReqRes reqRes = new ReqRes();
+    public AuthorizationDTO updateUser(UUID userId, AppUser updatedUser) {
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO();
         try {
             Optional<AppUser> userOptional = usersRepository.findById(userId);
             if (userOptional.isPresent()) {
@@ -176,39 +178,58 @@ public class UsersManagementService {
                 }
 
                 AppUser savedUser = usersRepository.save(existingUser);
-                reqRes.setAppUser(savedUser);
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("User updated successfully");
+                authorizationDTO.setAppUser(savedUser);
+                authorizationDTO.setStatusCode(200);
+                authorizationDTO.setMessage("User updated successfully");
             } else {
-                reqRes.setStatusCode(404);
-                reqRes.setMessage("User not found for update");
+                authorizationDTO.setStatusCode(404);
+                authorizationDTO.setMessage("User not found for update");
             }
         } catch (Exception e) {
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Error occurred while updating user: " + e.getMessage());
+            authorizationDTO.setStatusCode(500);
+            authorizationDTO.setMessage("Error occurred while updating user: " + e.getMessage());
         }
-        return reqRes;
+        return authorizationDTO;
     }
 
 
-    public ReqRes getMyInfo(String username){
-        ReqRes reqRes = new ReqRes();
+    public AuthorizationDTO getMyInfo(String username){
+        AuthorizationDTO authorizationDTO = new AuthorizationDTO();
         try {
             Optional<AppUser> userOptional = usersRepository.findByUsername(username);
             if (userOptional.isPresent()) {
-                reqRes.setAppUser(userOptional.get());
-                reqRes.setStatusCode(200);
-                reqRes.setMessage("successful");
+                authorizationDTO.setAppUser(userOptional.get());
+                authorizationDTO.setStatusCode(200);
+                authorizationDTO.setMessage("successful");
             } else {
-                reqRes.setStatusCode(404);
-                reqRes.setMessage("User not found for update");
+                authorizationDTO.setStatusCode(404);
+                authorizationDTO.setMessage("User not found for update");
             }
 
         }catch (Exception e){
-            reqRes.setStatusCode(500);
-            reqRes.setMessage("Error occurred while getting user info: " + e.getMessage());
+            authorizationDTO.setStatusCode(500);
+            authorizationDTO.setMessage("Error occurred while getting user info: " + e.getMessage());
         }
-        return reqRes;
+        return authorizationDTO;
 
+    }
+
+    public AppUser getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        AuthorizationDTO response = getMyInfo(username);
+
+        if (response.getAppUser() == null) {
+            throw new RuntimeException("AppUser not found in response.");
+        }
+
+        AppUser appUser = new AppUser();
+        appUser.setId(UUID.fromString(String.valueOf(response.getAppUser().getId())));
+        appUser.setUsername(response.getAppUser().getUsername());
+        appUser.setName(response.getAppUser().getName());
+        appUser.setSurname(response.getAppUser().getSurname());
+        appUser.setPassword(response.getAppUser().getPassword());
+        appUser.setRole(response.getAppUser().getRole());
+        return appUser;
     }
 }
