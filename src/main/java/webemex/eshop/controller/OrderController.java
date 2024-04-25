@@ -2,10 +2,7 @@ package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import webemex.eshop.dto.request.CartItemRequestDTO;
-import webemex.eshop.dto.request.OrderItemRequestDTO;
 import webemex.eshop.dto.response.OrderItemResponseDTO;
 import webemex.eshop.dto.response.OrderResponseDTO;
 import webemex.eshop.model.AppUser;
@@ -18,7 +15,6 @@ import webemex.eshop.service.OrderService;
 import webemex.eshop.service.UsersManagementService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,7 +35,7 @@ public class OrderController {
     @Autowired
     OrderItemService orderItemService;
 
-    @GetMapping("/")
+    @GetMapping("/show-all")
     @PreAuthorize("isAuthenticated()")
     public List<OrderResponseDTO> showOrders() {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
@@ -86,19 +82,29 @@ public class OrderController {
         orderService.saveOrder(order);
     }
 
-    @PostMapping("/details")
+    @GetMapping("/items/{orderId}")
     @PreAuthorize("isAuthenticated()")
-    public List<OrderItemResponseDTO> openOrder(@RequestBody OrderItemRequestDTO req) {
+    public List<OrderItemResponseDTO> openOrder(@PathVariable UUID orderId) {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
-        UUID orderId = UUID.fromString(req.getOrderId());
 
         List<OrderItem> userOrderItems = orderItemService.findUserOrderItemsByOrderId(appUser, orderId);
-        System.out.println(userOrderItems.size());
 
         List<OrderItemResponseDTO> userOrderItemsDTO = userOrderItems.stream()
                 .map(OrderItemResponseDTO::new)
                 .collect(Collectors.toList());
 
         return userOrderItemsDTO;
+    }
+
+    @GetMapping("/details/{orderId}")
+    @PreAuthorize("isAuthenticated()")
+    public OrderResponseDTO getOrderById(@PathVariable UUID orderId) {
+        AppUser appUser = usersManagementService.getAuthenticatedUser();
+
+        Order userOrderById = orderService.findUserOrderById(appUser, orderId);
+
+        OrderResponseDTO orderResponseDTO = new OrderResponseDTO(userOrderById);
+
+        return orderResponseDTO;
     }
 }
