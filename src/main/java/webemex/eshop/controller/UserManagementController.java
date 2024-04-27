@@ -7,9 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.AuthorizationDTO;
+import webemex.eshop.dto.request.CartItemRequestDTO;
+import webemex.eshop.dto.request.IsUsernameAvailableRequestDTO;
+import webemex.eshop.dto.response.IsUsernameAvailableResponseDTO;
 import webemex.eshop.model.AppUser;
 import webemex.eshop.service.UsersManagementService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -40,7 +46,7 @@ public class UserManagementController {
 
     }
 
-    @GetMapping("/admin/get-users/{userId}")
+    @GetMapping("/admin/user/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AuthorizationDTO> getUSerByID(@PathVariable UUID userId){
         return ResponseEntity.ok(usersManagementService.getUsersById(userId));
@@ -66,5 +72,21 @@ public class UserManagementController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AuthorizationDTO> deleteUSer(@PathVariable UUID userId){
         return ResponseEntity.ok(usersManagementService.deleteUser(userId));
+    }
+
+    @PostMapping("/user/is-username-available")
+    public IsUsernameAvailableResponseDTO isUsernameAvailable(@RequestBody IsUsernameAvailableRequestDTO req) {
+        IsUsernameAvailableResponseDTO response = new IsUsernameAvailableResponseDTO();
+        response.setIsUsernameAvailable(true);
+
+        AuthorizationDTO allUsersDTO = usersManagementService.getAllUsers();
+
+        allUsersDTO.getAppUserList().forEach(user -> {
+            if (user.getUsername().equals(req.getUsername())) {
+                response.setIsUsernameAvailable(false);
+            }
+        });
+
+        return response;
     }
 }

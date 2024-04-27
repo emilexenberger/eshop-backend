@@ -1,9 +1,11 @@
 package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import webemex.eshop.dto.AuthorizationDTO;
 import webemex.eshop.dto.request.CartItemRequestDTO;
 import webemex.eshop.dto.request.ItemRequestDTO;
 import webemex.eshop.dto.response.ItemResponseDTO;
@@ -34,10 +36,20 @@ public class ItemController {
         itemService.saveItem(item);
     }
 
-    @PostMapping("/remove")
+    @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void removeItem(@RequestBody ItemRequestDTO req) {
         UUID itemId = UUID.fromString(req.getId());
         itemService.deleteItemById(itemId);
+    }
+
+    @GetMapping("/details/{itemId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ItemResponseDTO getItemById(@PathVariable UUID itemId){
+        System.out.println(itemId);
+        ItemResponseDTO response = new ItemResponseDTO(itemService.findItemById(itemId));
+        System.out.println(response);
+        return response;
+
     }
 }

@@ -78,9 +78,6 @@ public class UsersManagementService {
     }
 
 
-
-
-
     public AuthorizationDTO refreshToken(AuthorizationDTO refreshTokenReqiest){
         AuthorizationDTO response = new AuthorizationDTO();
         try{
