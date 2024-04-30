@@ -33,12 +33,10 @@ public class CartController {
     @PreAuthorize("isAuthenticated()")
     public List<CartItemResponseDTO> showCart() {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
-        List<CartItem> userCartItems = cartItemService.findUserCartItems(appUser);
 
-        List<CartItemResponseDTO> userCartItemsDTO = userCartItems.stream()
+        return cartItemService.findUserCartItems(appUser).stream()
                 .map(CartItemResponseDTO::new)
                 .collect(Collectors.toList());
-        return userCartItemsDTO;
     }
 
     @PostMapping("/add")
@@ -64,15 +62,15 @@ public class CartController {
         List<CartItem> userCartItems = cartItemService.findUserCartItems(appUser);
 
 //        If the item already is in the cart, just add up to entered volume, otherwise create a new entry for CartItem table in the database
-        for (CartItem existingUserCartItem : userCartItems) {
-            if (existingUserCartItem.getItem().getId().equals(item.getId())) {
-                System.out.println("Existuje zaznam s tymto itemom pre tohto pouzivatela");
-                System.out.println("ID zaznamu v cart_item tabulke je: " + existingUserCartItem.getId());
-                existingUserCartItem.setVolume(existingUserCartItem.getVolume() + enteredVolume);
-                cartItemService.saveItem(existingUserCartItem);
-                return;
-            }
-        }
+        userCartItems.stream()
+                .filter(existingCartItem -> existingCartItem.getItem().getId().equals(item.getId()))
+                .findFirst() // Nájde prvú zhodu
+                .ifPresent(existingCartItem -> {
+                    System.out.println("Existuje záznam pre tento item");
+                    existingCartItem.setVolume(existingCartItem.getVolume() + enteredVolume);
+                    cartItemService.saveItem(existingCartItem);
+                    return;
+                });
         System.out.println("Neexistuje zaznam s tymto itemom pre tohto pouzivatela");
         cartItem.setVolume(enteredVolume);
         cartItemService.saveItem(cartItem);
@@ -88,6 +86,7 @@ public class CartController {
 //        Change volume in the table cart_item
         CartItem userCartItem = cartItemService.findUserCartItemById(appUser, itemId);
         int itemDiff = userCartItem.getVolume() - enteredVolume;
+
         if (enteredVolume == 0) {
             cartItemService.deleteItemById(userCartItem.getId());
         } else {
@@ -96,12 +95,11 @@ public class CartController {
         }
 
 //        Consider the change in volumes and in the table item
-        List<Item> allItems = itemService.findAllItems();
-        for (Item item : allItems) {
-            if (item.equals(userCartItem.getItem())) {
-                item.setVolume(item.getVolume() + itemDiff);
-                itemService.saveItem(item);
-            }
-        }
+        itemService.findAllItems().stream()
+                .filter(item -> item.equals(userCartItem.getItem()))
+                .forEach(item -> {
+                    item.setVolume(item.getVolume() + itemDiff);
+                    itemService.saveItem(item);
+                });
     }
 }

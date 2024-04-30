@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.response.ItemResponseDTO;
-import webemex.eshop.model.Item;
 import webemex.eshop.service.*;
 
 import java.util.List;
@@ -20,10 +19,8 @@ public class EshopController {
     @GetMapping("/items")
     @PreAuthorize("isAuthenticated()")
     public List<ItemResponseDTO> getAllItems() {
-        List<Item> allItems = itemService.findAllItems();
-        List<ItemResponseDTO> allItemsDTO = allItems.stream()
+        return itemService.findAllItems().stream()
                 .map(ItemResponseDTO::new)
                 .collect(Collectors.toList());
-        return allItemsDTO;
     }
 }

@@ -1,12 +1,8 @@
 package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import webemex.eshop.dto.AuthorizationDTO;
-import webemex.eshop.dto.request.CartItemRequestDTO;
 import webemex.eshop.dto.request.ItemRequestDTO;
 import webemex.eshop.dto.response.ItemResponseDTO;
 import webemex.eshop.model.Item;
@@ -32,7 +28,6 @@ public class ItemController {
         if (req.getPrice() != null) item.setPrice(req.getPrice());
         if (req.getVolume() != null) item.setVolume(req.getVolume());
 
-        System.out.println(item);
         itemService.saveItem(item);
     }
 
@@ -46,9 +41,7 @@ public class ItemController {
     @GetMapping("/details/{itemId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ItemResponseDTO getItemById(@PathVariable UUID itemId){
-        System.out.println(itemId);
         ItemResponseDTO response = new ItemResponseDTO(itemService.findItemById(itemId));
-        System.out.println(response);
         return response;
 
     }

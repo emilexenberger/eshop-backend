@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import webemex.eshop.model.Item;
 import webemex.eshop.repository.ItemRepository;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,16 +23,18 @@ class ItemServiceTest {
     private ItemRepository itemRepository;
 
     @Test
-    void whenFindAllItems_thenItemListShouldBeReturned() {
+    void givenOneItemInRepository_whenFindAllItems_thenReturnsOneItem() {
+        // Prepare a test item with a specific product name
+        String productName = "TestItem";
         Item item = new Item();
-        item.setProductName("TestItem");
-        List<Item> list = new ArrayList<>();
-        list.add(item);
+        item.setProductName(productName);
 
-        Mockito.when(itemRepository.findAll()).thenReturn(list);
+        // Mock the behavior of the repository to return a predefined list
+        Mockito.when(itemRepository.findAll()).thenReturn(Collections.singletonList(item));
 
+        // Call the method to be tested and verify the results
         List<Item> items = itemService.findAllItems();
-        assertEquals(1, items.size());
-        assertEquals("TestItem", items.get(0).getProductName());
+        assertEquals(1, items.size(), "Expected one item"); // Overte veľkosť zoznamu
+        assertEquals(productName, items.get(0).getProductName(), "Expected product name to match"); // Overte názov produktu
     }
 }

@@ -39,12 +39,10 @@ public class OrderController {
     @PreAuthorize("isAuthenticated()")
     public List<OrderResponseDTO> showOrders() {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
-        List<Order> userOrders = orderService.findUserOrders(appUser);
 
-        List<OrderResponseDTO> userOrdersDTO = userOrders.stream()
+        return orderService.findUserOrders(appUser).stream()
                 .map(OrderResponseDTO::new)
                 .collect(Collectors.toList());
-        return userOrdersDTO;
     }
 
     @GetMapping("/place")
@@ -59,23 +57,24 @@ public class OrderController {
         order.setAppUser(appUser);
         orderService.saveOrder(order);
 
-        double totalPrice = 0;
-
 //        Move items from cart to order
         List<CartItem> userCartItems = cartItemService.findUserCartItems(appUser);
 
-        for (CartItem userCartItem : userCartItems) {
-//            Create a new orderItem
-            OrderItem orderItem = new OrderItem(userCartItem);
+//        Total price
+        double totalPrice = userCartItems.stream()
+                .mapToDouble(item -> item.getItem().getPrice() * item.getVolume()) // Spočítať cenu za každý položku
+                .sum();
+
+//        Move items from cart to order
+        userCartItems.forEach(cartItem -> {
+//            Move to order
+            OrderItem orderItem = new OrderItem(cartItem);
             orderItem.setOrder(order);
             orderItemService.saveOrderItem(orderItem);
 
-//            Sum up total order price
-            totalPrice += userCartItem.getItem().getPrice() * userCartItem.getVolume();
-
-//            Delete the item from cart
-            cartItemService.deleteItemById(userCartItem.getId());
-        }
+//            Delete from cart
+            cartItemService.deleteItemById(cartItem.getId());
+        });
 
 //        Save order
         order.setTotalPrice(totalPrice);
@@ -87,13 +86,9 @@ public class OrderController {
     public List<OrderItemResponseDTO> openOrder(@PathVariable UUID orderId) {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
 
-        List<OrderItem> userOrderItems = orderItemService.findUserOrderItemsByOrderId(appUser, orderId);
-
-        List<OrderItemResponseDTO> userOrderItemsDTO = userOrderItems.stream()
+        return orderItemService.findUserOrderItemsByOrderId(appUser, orderId).stream()
                 .map(OrderItemResponseDTO::new)
                 .collect(Collectors.toList());
-
-        return userOrderItemsDTO;
     }
 
     @GetMapping("/details/{orderId}")
@@ -101,10 +96,6 @@ public class OrderController {
     public OrderResponseDTO getOrderById(@PathVariable UUID orderId) {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
 
-        Order userOrderById = orderService.findUserOrderById(appUser, orderId);
-
-        OrderResponseDTO orderResponseDTO = new OrderResponseDTO(userOrderById);
-
-        return orderResponseDTO;
+        return new OrderResponseDTO(orderService.findUserOrderById(appUser, orderId));
     }
 }
