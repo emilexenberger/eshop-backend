@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "c7d68061-225c-483d-ada2-392f119b1cd0",
+		"name": "Eshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33954663"
+	},
+	"item": [
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "cart-items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzEzOTAxMjA1LCJleHAiOjE3MTM5ODc2MDV9.XBGei30oEmQ1zbS11jvzYa6ePeDPq7TqnJvjE7NCCGM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/cart/"
+					},
+					"response": []
+				},
+				{
+					"name": "add-to-cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzEzODA2NTk1LCJleHAiOjE3MTM4OTI5OTV9.uo4GP-cRHOlBJ87IjQHBCz9tWxshB3jEbsfNEbhx12I"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\":\"e4857fb6-c8f1-11ee-b215-309c23b0824d\",\r\n    \"volume\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cart/add"
+					},
+					"response": []
+				},
+				{
+					"name": "edit-cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzEzNzExMTczLCJleHAiOjE3MTM3OTc1NzN9.i27uA6gOV5y5NMkCjytip3h3ZIZCkd-IMfjCPaj9iLM"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\":\"e4857aa9-c8f1-11ee-b215-309c23b0824d\",\r\n    \"volume\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cart/edit"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Eshop",
+			"item": [
+				{
+					"name": "eshop",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzE0MjI4MDcyLCJleHAiOjE3MTQzMTQ0NzJ9.ya-nnB2I29_Q9ekcMolboBNnF1wgxV1BIKM7cp5HmxA"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/eshop/items"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "edit-item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzcyNDc4MCwiZXhwIjoxNzEzODExMTgwfQ.MWicf9bX6qnnMkpVNadrQsQo1AMH8SeQo-RF72ck4II"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"e485735f-c8f1-11ee-b215-309c23b0824d\",\r\n    \"productName\": \"Samsung Galaxy S21\",\r\n    \"productCode\": 3423,\r\n    \"price\": 699.99,\r\n    \"volume\": 70\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/item/save"
+					},
+					"response": []
+				},
+				{
+					"name": "create-item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzcyNDc4MCwiZXhwIjoxNzEzODExMTgwfQ.MWicf9bX6qnnMkpVNadrQsQo1AMH8SeQo-RF72ck4II"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productName\": \"test test test test\",\r\n    \"productCode\": 3423,\r\n    \"price\": 699.99,\r\n    \"volume\": 77\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/item/save"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxNDIyNjM1OCwiZXhwIjoxNzE0MzEyNzU4fQ.qxWk5uRzsvAS9ttGZDEuJV73Sfj3DDNH3UTRN0XgFmI"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"e4859653-c8f1-11ee-b215-309c23b0824d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/item/delete"
+					},
+					"response": []
+				},
+				{
+					"name": "item-details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxNDIzMDczMSwiZXhwIjoxNzE0MzE3MTMxfQ.viSs4fDGgYEc-Sg_FO3M9N2UX_EccbLurQDXdzKzsM4"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/item/details/0874f62c-3cda-4621-871b-c24585b40eb2"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "jwt-authentication",
+			"item": [
+				{
+					"name": "register USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"test1\",\r\n    \"name\":\"George1\",\r\n    \"surname\":\"Smith\",\r\n    \"password\":\"test\",\r\n    \"role\":\"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "register ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"name\":\"Dana\",\r\n    \"surname\":\"Merth\",\r\n    \"password\":\"admin\",\r\n    \"role\":\"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login USER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"test\",\r\n    \"password\":\"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "login ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "get-all-users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxNDIyMDE2OSwiZXhwIjoxNzE0MzA2NTY5fQ.j1n0yWlD63H58XRU1EuYd8fyufr5g_TK-3ml5iemwJw"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/admin/get-all-users"
+					},
+					"response": []
+				},
+				{
+					"name": "get-user-by-id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxNDIzMDAxMCwiZXhwIjoxNzE0MzE2NDEwfQ.SS29HY7G3VDBRLDHVXg40Mw8_TfmaRK9QbIHBcZNqNc"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/admin/user/faa71e22-aac4-447e-8178-4068e541c7a1"
+					},
+					"response": []
+				},
+				{
+					"name": "get-profile-info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzE0NTQ5ODQyLCJleHAiOjE3MTQ2MzYyNDJ9.nkHvx_OQ4IkACiTbl_mjMFarC5roD-XzwXVv7yKhG_k"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/user/get-profile"
+					},
+					"response": []
+				},
+				{
+					"name": "user-update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzcwMzYzOCwiZXhwIjoxNzEzNzkwMDM4fQ.wCw-qUYSFMEUi_LPabVPHquOEA7BJVZ_geKBM0CKr08"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"test\",\r\n    \"name\":\"Jonatan\",\r\n    \"surname\":\"Smith\",\r\n    \"password\":\"test\",\r\n    \"role\":\"USER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/admin/update/faa71e22-aac4-447e-8178-4068e541c7a1"
+					},
+					"response": []
+				},
+				{
+					"name": "user-update reduced",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzcwMzYzOCwiZXhwIjoxNzEzNzkwMDM4fQ.wCw-qUYSFMEUi_LPabVPHquOEA7BJVZ_geKBM0CKr08"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"John1\",\r\n    \"surname\":\"Smith\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/admin/update/faa71e22-aac4-447e-8178-4068e541c7a1"
+					},
+					"response": []
+				},
+				{
+					"name": "delete USER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzcwMzYzOCwiZXhwIjoxNzEzNzkwMDM4fQ.wCw-qUYSFMEUi_LPabVPHquOEA7BJVZ_geKBM0CKr08"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:8080/admin/delete/581f70c1-d8d8-46c2-9682-d297596ad4c9"
+					},
+					"response": []
+				},
+				{
+					"name": "is-username-available",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/user/is-username-available"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "show-user-orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzE0MDQ0NzM5LCJleHAiOjE3MTQxMzExMzl9.NMvO6AsreIFAP2UJqqoXt2vLDqFpXtPNx-r6iNLKYhU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/order/show-all"
+					},
+					"response": []
+				},
+				{
+					"name": "place-order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzEzNzI3NDYxLCJleHAiOjE3MTM4MTM4NjF9.ZN3kQ8zNRNhiFBI72QxWdhkSCXrDkRwBUxj3l4NOhpc"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/order/place"
+					},
+					"response": []
+				},
+				{
+					"name": "order-items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzE0MDQ0NzM5LCJleHAiOjE3MTQxMzExMzl9.NMvO6AsreIFAP2UJqqoXt2vLDqFpXtPNx-r6iNLKYhU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/order/items/7117b3df-0f36-4dc6-bca3-4f80841a0821"
+					},
+					"response": []
+				},
+				{
+					"name": "order-details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNzE0MDQ0NzM5LCJleHAiOjE3MTQxMzExMzl9.NMvO6AsreIFAP2UJqqoXt2vLDqFpXtPNx-r6iNLKYhU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/order/details/7117b3df-0f36-4dc6-bca3-4f80841a0821"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
