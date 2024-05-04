@@ -1,6 +1,7 @@
 package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.request.CartItemRequestDTO;
@@ -58,6 +59,7 @@ public class CartController {
      */
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(value = HttpStatus.OK)
     public void addToCart(@RequestBody CartItemRequestDTO req) {
         UUID itemId = UUID.fromString(req.getItemId());
         int enteredVolume = req.getVolume();
@@ -95,6 +97,7 @@ public class CartController {
      */
     @PostMapping("/edit")
     @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(value = HttpStatus.OK)
     public void editCartItem(@RequestBody CartItemRequestDTO req) {
         UUID itemId = UUID.fromString(req.getItemId());
         int enteredVolume = req.getVolume();
@@ -103,6 +106,7 @@ public class CartController {
         // Retrieve the existing cart item and adjust its volume.
         CartItem userCartItem = cartItemService.findUserCartItemById(appUser, itemId);
         int volumeDifference = userCartItem.getVolume() - enteredVolume;
+        if (volumeDifference == 0) { return; }
 
         if (enteredVolume == 0) {
             cartItemService.deleteItemById(userCartItem.getId());

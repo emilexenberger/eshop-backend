@@ -82,4 +82,21 @@ public class OrderService {
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * Deletes all orders associated with a specific user.
+     *
+     * @param appUser The AppUser whose orders are to be deleted.
+     */
+    public void deleteUserOrders(AppUser appUser) {
+        if (appUser == null) {
+            throw new IllegalArgumentException("AppUser cannot be null");
+        }
+
+        List<Order> userOrders = findUserOrders(appUser);
+
+        for (Order order : userOrders) {
+            deleteOrderById(order.getId());
+        }
+    }
 }

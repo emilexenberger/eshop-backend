@@ -9,18 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.AuthorizationDTO;
 import webemex.eshop.dto.request.IsUsernameAvailableRequestDTO;
 import webemex.eshop.dto.response.IsUsernameAvailableResponseDTO;
-import webemex.eshop.model.AppUser;
 import webemex.eshop.service.UsersManagementService;
 
-import java.util.UUID;
-
 /**
- * Controller responsible for managing user-related operations in the e-shop.
- * It handles user registration, login, token refresh, and administrative operations such as updating and deleting users.
+ * Controller responsible for user-related operations in the e-shop.
+ * This includes user registration, login, token refresh, and profile information.
  */
 @RestController
 @CrossOrigin
-public class UserManagementController {
+public class UserController {
 
     @Autowired
     private UsersManagementService usersManagementService;
@@ -59,42 +56,6 @@ public class UserManagementController {
     }
 
     /**
-     * Retrieves a list of all users, accessible only by administrators.
-     *
-     * @return a {@link ResponseEntity} with an AuthorizationDTO containing all registered users.
-     */
-    @GetMapping("/admin/get-all-users")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AuthorizationDTO> getAllUsers() {
-        return ResponseEntity.ok(usersManagementService.getAllUsers());
-    }
-
-    /**
-     * Retrieves information about a specific user by their ID.
-     *
-     * @param userId the UUID of the user to retrieve.
-     * @return a {@link ResponseEntity} with the AuthorizationDTO containing the user's details.
-     */
-    @GetMapping("/admin/user/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AuthorizationDTO> getUserByID(@PathVariable UUID userId) {
-        return ResponseEntity.ok(usersManagementService.getUsersById(userId));
-    }
-
-    /**
-     * Updates information about a specific user.
-     *
-     * @param userId the UUID of the user to update.
-     * @param reqres the updated {@link AppUser} information.
-     * @return a {@link ResponseEntity} with the updated AuthorizationDTO.
-     */
-    @PutMapping("/admin/update/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AuthorizationDTO> updateUser(@PathVariable UUID userId, @RequestBody AppUser reqres) {
-        return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
-    }
-
-    /**
      * Retrieves the profile information of the currently authenticated user.
      *
      * @return a {@link ResponseEntity} with the AuthorizationDTO containing the user's profile information.
@@ -106,18 +67,6 @@ public class UserManagementController {
         String username = authentication.getName();
         AuthorizationDTO response = usersManagementService.getMyInfo(username);
         return ResponseEntity.status(response.getStatusCode()).body(response);
-    }
-
-    /**
-     * Deletes a specific user by their ID.
-     *
-     * @param userId the UUID of the user to delete.
-     * @return a {@link ResponseEntity} indicating the outcome of the deletion.
-     */
-    @DeleteMapping("/admin/delete/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<AuthorizationDTO> deleteUser(@PathVariable UUID userId) {
-        return ResponseEntity.ok(usersManagementService.deleteUser(userId));
     }
 
     /**

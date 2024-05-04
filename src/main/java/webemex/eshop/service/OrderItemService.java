@@ -94,4 +94,18 @@ public class OrderItemService {
                 .filter(orderItem -> orderItem.getOrder().getId().equals(orderId))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Deletes all order items associated with a specific user.
+     *
+     * @param appUser The user whose order items are to be deleted.
+     */
+    public void deleteUserOrderItems(AppUser appUser) {
+        List<OrderItem> userOrderItems = findUserOrderItems(appUser);
+
+        for (OrderItem orderItem : userOrderItems) {
+            deleteOrderItemById(orderItem.getId());
+        }
+    }
+
 }

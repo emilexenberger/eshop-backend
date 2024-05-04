@@ -1,4 +1,4 @@
-package webemex.eshop.controller;
+package webemex.eshop;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import webemex.eshop.dto.AuthorizationDTO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@Transactional
 @DisplayName("Test user registration, login, and profile retrieval")
-class UserManagementControllerTest {
+class RegistrationIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

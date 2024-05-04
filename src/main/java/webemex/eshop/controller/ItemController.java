@@ -1,6 +1,7 @@
 package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.request.ItemRequestDTO;
@@ -32,6 +33,7 @@ public class ItemController {
      */
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(value = HttpStatus.OK)
     public void saveItem(@RequestBody ItemRequestDTO req) {
         Item item = new Item();
 
@@ -51,6 +53,7 @@ public class ItemController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(value = HttpStatus.OK)
     public void removeItem(@RequestBody ItemRequestDTO req) {
         UUID itemId = UUID.fromString(req.getId());
         itemService.deleteItemById(itemId);

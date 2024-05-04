@@ -88,4 +88,21 @@ public class CartItemService {
                 .findFirst()
                 .orElse(null);
     }
+
+    /**
+     * Deletes all cart items associated with a specific user.
+     *
+     * @param appUser the AppUser whose cart items are to be deleted.
+     */
+    public void deleteUserCartItems(AppUser appUser) {
+        if (appUser == null) {
+            throw new IllegalArgumentException("AppUser cannot be null");
+        }
+
+        List<CartItem> userCartItems = findUserCartItems(appUser);
+
+        for (CartItem cartItem : userCartItems) {
+            deleteItemById(cartItem.getId());
+        }
+    }
 }

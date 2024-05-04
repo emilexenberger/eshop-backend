@@ -2,9 +2,8 @@ package webemex.eshop.dto.response;
 
 import lombok.Data;
 import webemex.eshop.model.Order;
+
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class OrderResponseDTO {

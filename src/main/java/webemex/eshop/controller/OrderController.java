@@ -1,6 +1,7 @@
 package webemex.eshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import webemex.eshop.dto.response.OrderItemResponseDTO;
@@ -9,7 +10,10 @@ import webemex.eshop.model.AppUser;
 import webemex.eshop.model.CartItem;
 import webemex.eshop.model.Order;
 import webemex.eshop.model.OrderItem;
-import webemex.eshop.service.*;
+import webemex.eshop.service.CartItemService;
+import webemex.eshop.service.OrderItemService;
+import webemex.eshop.service.OrderService;
+import webemex.eshop.service.UsersManagementService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,6 +63,7 @@ public class OrderController {
      */
     @GetMapping("/place")
     @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(value = HttpStatus.OK)
     public void placeOrder() {
         AppUser appUser = usersManagementService.getAuthenticatedUser();
         LocalDateTime dateTime = LocalDateTime.now();
