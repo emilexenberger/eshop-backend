@@ -9,13 +9,25 @@ import webemex.eshop.service.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for handling e-shop-related requests.
+ * This controller provides endpoints for interacting with items in the e-shop.
+ *
+ * It includes functionality to fetch all items available in the e-shop.
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/eshop")
 public class EshopController {
-    @Autowired
-    ItemService itemService;
 
+    @Autowired
+    private ItemService itemService;
+
+    /**
+     * Retrieves all items available in the e-shop.
+     *
+     * @return a list of {@link ItemResponseDTO} representing all items.
+     */
     @GetMapping("/items")
     @PreAuthorize("isAuthenticated()")
     public List<ItemResponseDTO> getAllItems() {

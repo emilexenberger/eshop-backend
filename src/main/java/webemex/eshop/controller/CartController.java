@@ -13,22 +13,34 @@ import webemex.eshop.service.ItemService;
 import webemex.eshop.service.UsersManagementService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * CartController is responsible for handling cart-related operations.
+ * This includes viewing the cart, adding items to the cart, and editing existing cart items.
+ * All endpoints are accessible only to authenticated users.
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/cart")
 public class CartController {
-    @Autowired
-    UsersManagementService usersManagementService;
 
     @Autowired
-    CartItemService cartItemService;
+    private UsersManagementService usersManagementService;
 
     @Autowired
-    ItemService itemService;
+    private CartItemService cartItemService;
 
+    @Autowired
+    private ItemService itemService;
+
+    /**
+     * Retrieve the cart items for the authenticated user.
+     *
+     * @return A list of CartItemResponseDTO objects representing the items in the user's cart.
+     */
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public List<CartItemResponseDTO> showCart() {
@@ -39,43 +51,48 @@ public class CartController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Add an item to the authenticated user's cart.
+     *
+     * @param req A CartItemRequestDTO containing the item ID and the volume to be added.
+     */
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
     public void addToCart(@RequestBody CartItemRequestDTO req) {
         UUID itemId = UUID.fromString(req.getItemId());
         int enteredVolume = req.getVolume();
 
-//        Create empty cartItem
         CartItem cartItem = new CartItem();
 
-//        Assign appUser to cartItem
         AppUser appUser = usersManagementService.getAuthenticatedUser();
         cartItem.setAppUser(appUser);
 
-//        Subtract volume of item from inventory and assign item to cartItem
+        // Adjust the inventory by subtracting the specified volume from the item's stock.
         Item item = itemService.findItemById(itemId);
         item.setVolume(item.getVolume() - enteredVolume);
         itemService.saveItem(item);
         cartItem.setItem(item);
 
-//        Get list of all userCartItems
-        List<CartItem> userCartItems = cartItemService.findUserCartItems(appUser);
-
-//        If the item already is in the cart, just add up to entered volume, otherwise create a new entry for CartItem table in the database
-        userCartItems.stream()
+        // Check if the item is already in the cart; if so, update the volume; otherwise, create a new entry.
+        Optional<CartItem> matchingItem = cartItemService.findUserCartItems(appUser).stream()
                 .filter(existingCartItem -> existingCartItem.getItem().getId().equals(item.getId()))
-                .findFirst() // Nájde prvú zhodu
-                .ifPresent(existingCartItem -> {
-                    System.out.println("Existuje záznam pre tento item");
-                    existingCartItem.setVolume(existingCartItem.getVolume() + enteredVolume);
-                    cartItemService.saveItem(existingCartItem);
-                    return;
-                });
-        System.out.println("Neexistuje zaznam s tymto itemom pre tohto pouzivatela");
-        cartItem.setVolume(enteredVolume);
-        cartItemService.saveItem(cartItem);
+                .findFirst();
+
+        if (matchingItem.isPresent()) {
+            CartItem existingCartItem = matchingItem.get();
+            existingCartItem.setVolume(existingCartItem.getVolume() + enteredVolume);
+            cartItemService.saveItem(existingCartItem);
+        } else {
+            cartItem.setVolume(enteredVolume);
+            cartItemService.saveItem(cartItem);
+        }
     }
 
+    /**
+     * Edit an existing cart item in the authenticated user's cart.
+     *
+     * @param req A CartItemRequestDTO containing the item ID and the new volume.
+     */
     @PostMapping("/edit")
     @PreAuthorize("isAuthenticated()")
     public void editCartItem(@RequestBody CartItemRequestDTO req) {
@@ -83,9 +100,9 @@ public class CartController {
         int enteredVolume = req.getVolume();
         AppUser appUser = usersManagementService.getAuthenticatedUser();
 
-//        Change volume in the table cart_item
+        // Retrieve the existing cart item and adjust its volume.
         CartItem userCartItem = cartItemService.findUserCartItemById(appUser, itemId);
-        int itemDiff = userCartItem.getVolume() - enteredVolume;
+        int volumeDifference = userCartItem.getVolume() - enteredVolume;
 
         if (enteredVolume == 0) {
             cartItemService.deleteItemById(userCartItem.getId());
@@ -94,11 +111,11 @@ public class CartController {
             cartItemService.saveItem(userCartItem);
         }
 
-//        Consider the change in volumes and in the table item
+        // Update the corresponding item's inventory.
         itemService.findAllItems().stream()
                 .filter(item -> item.equals(userCartItem.getItem()))
                 .forEach(item -> {
-                    item.setVolume(item.getVolume() + itemDiff);
+                    item.setVolume(item.getVolume() + volumeDifference);
                     itemService.saveItem(item);
                 });
     }

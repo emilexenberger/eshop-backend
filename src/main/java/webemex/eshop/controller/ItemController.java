@@ -10,13 +10,26 @@ import webemex.eshop.service.ItemService;
 
 import java.util.UUID;
 
+/**
+ * Controller for managing items in the e-shop.
+ * This controller provides endpoints for adding, deleting, and retrieving item details.
+ *
+ * Only administrators with the proper authority are allowed to access certain endpoints.
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/item")
 public class ItemController {
-    @Autowired
-    ItemService itemService;
 
+    @Autowired
+    private ItemService itemService;
+
+    /**
+     * Saves an item to the e-shop.
+     * This method is used to add new items or update existing ones.
+     *
+     * @param req the {@link ItemRequestDTO} containing item information.
+     */
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void saveItem(@RequestBody ItemRequestDTO req) {
@@ -31,6 +44,11 @@ public class ItemController {
         itemService.saveItem(item);
     }
 
+    /**
+     * Deletes an item from the e-shop.
+     *
+     * @param req the {@link ItemRequestDTO} with the ID of the item to be deleted.
+     */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void removeItem(@RequestBody ItemRequestDTO req) {
@@ -38,11 +56,15 @@ public class ItemController {
         itemService.deleteItemById(itemId);
     }
 
+    /**
+     * Retrieves item details by its ID.
+     *
+     * @param itemId the ID of the item to be retrieved.
+     * @return the {@link ItemResponseDTO} containing item details.
+     */
     @GetMapping("/details/{itemId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ItemResponseDTO getItemById(@PathVariable UUID itemId){
-        ItemResponseDTO response = new ItemResponseDTO(itemService.findItemById(itemId));
-        return response;
-
+        return new ItemResponseDTO(itemService.findItemById(itemId));
     }
 }

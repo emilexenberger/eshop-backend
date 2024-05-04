@@ -1,0 +1,9 @@
+webemex.eshop
+webemex.eshop.config
+webemex.eshop.controller
+webemex.eshop.dto
+webemex.eshop.dto.request
+webemex.eshop.dto.response
+webemex.eshop.model
+webemex.eshop.repository
+webemex.eshop.service
