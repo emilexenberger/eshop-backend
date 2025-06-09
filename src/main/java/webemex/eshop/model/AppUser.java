@@ -26,7 +26,7 @@ public class AppUser implements UserDetails {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(updatable = false, nullable = false, columnDefinition = "CHAR(36)")
     @Type(type = "uuid-char")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY) test
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
     private String username;
     private String name;
